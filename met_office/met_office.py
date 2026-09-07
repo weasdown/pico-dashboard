@@ -2,7 +2,7 @@ import network
 import os
 import sys
 import time
-import ujson
+import ujson as json
 import requests as r
 
 from met_office_classes import *
@@ -32,7 +32,14 @@ def connect_to_wifi() -> None:
         print('Connected to Wi-Fi\n')
 
 
-apikey = "eyJ4NXQjUzI1NiI6Ik5XVTVZakUxTkRjeVl6a3hZbUl4TkdSaFpqSmpOV1l6T1dGaE9XWXpNMk0yTWpRek5USm1OVEE0TXpOaU9EaG1NVFJqWVdNellXUm1ZalUyTTJJeVpBPT0iLCJraWQiOiJnYXRld2F5X2NlcnRpZmljYXRlX2FsaWFzIiwidHlwIjoiSldUIiwiYWxnIjoiUlMyNTYifQ==.eyJzdWIiOiJ3ZWFzZG93bjk5QGdtYWlsLmNvbUBjYXJib24uc3VwZXIiLCJhcHBsaWNhdGlvbiI6eyJvd25lciI6IndlYXNkb3duOTlAZ21haWwuY29tIiwidGllclF1b3RhVHlwZSI6bnVsbCwidGllciI6IlVubGltaXRlZCIsIm5hbWUiOiJzaXRlX3NwZWNpZmljLWJkYzYyZDRhLWRhZDAtNDA3ZS04NjIxLWM2Mjg4N2JjMDVmOSIsImlkIjo2MDM1MSwidXVpZCI6IjJhMjcyYWNiLTczMzQtNDQ4Ny04ZWEwLTQ0NzM0YmVhZDRiOSJ9LCJpc3MiOiJodHRwczpcL1wvYXBpLW1hbmFnZXIuYXBpLW1hbmFnZW1lbnQubWV0b2ZmaWNlLmNsb3VkOjQ0M1wvb2F1dGgyXC90b2tlbiIsInRpZXJJbmZvIjp7IndkaF9zaXRlX3NwZWNpZmljX2ZyZWUiOnsidGllclF1b3RhVHlwZSI6InJlcXVlc3RDb3VudCIsImdyYXBoUUxNYXhDb21wbGV4aXR5IjowLCJncmFwaFFMTWF4RGVwdGgiOjAsInN0b3BPblF1b3RhUmVhY2giOnRydWUsInNwaWtlQXJyZXN0TGltaXQiOjAsInNwaWtlQXJyZXN0VW5pdCI6InNlYyJ9fSwia2V5dHlwZSI6IlBST0RVQ1RJT04iLCJzdWJzY3JpYmVkQVBJcyI6W3sic3Vic2NyaWJlclRlbmFudERvbWFpbiI6ImNhcmJvbi5zdXBlciIsIm5hbWUiOiJTaXRlU3BlY2lmaWNGb3JlY2FzdCIsImNvbnRleHQiOiJcL3NpdGVzcGVjaWZpY1wvdjAiLCJwdWJsaXNoZXIiOiJKYWd1YXJfQ0kiLCJ2ZXJzaW9uIjoidjAiLCJzdWJzY3JpcHRpb25UaWVyIjoid2RoX3NpdGVfc3BlY2lmaWNfZnJlZSJ9XSwidG9rZW5fdHlwZSI6ImFwaUtleSIsImlhdCI6MTc4NzYwNzQ2MSwianRpIjoiNDI1NzhjNjQtYWM1YS00NGM5LWJhOTctNTc4ZWI2NzNjN2YwIn0=.Z7A5YE3zMgcjzXg4XMWid29HLRTlo1mKDE_yKQnY4dGD61hGST9kBWj7CQZ__yu7TyAKThsP9Up5OpMhUBsoSlS88tNc4F6dqOEl7jYg9nK9FOi3-79QpZreeVNAAPBImsOf9fMxFW7MSl7Co9lxJa4xEuJ5mXxtSpN865NwDs0DLmsKAOUduFNgvF3giB-wseHNikVAo9CuAG_aQMlO-dFmdAugqm6o1ydCJtGF_xVXTslcSSBlK82XWQNTnopkM412oUoeHi_Ys3nLRhS9eyWgH29S3Wkgfk1duUrFO4Lo-PEjCQv7aEjB6jqrz-JBCc1HGS3-DgrltdvzHo9CUg=="
+secrets_file: str = '.secrets.json'
+with open(secrets_file) as f:
+    secrets = f.read()
+secrets_json: dict = json.loads(secrets)
+
+api_key: str | None = secrets_json['api_key']
+if not api_key or api_key is None:
+    raise AttributeError('api_key environment variable must be defined')
 
 latitude = 51.821400
 longitude = 1.282080
@@ -42,7 +49,7 @@ frequency = "hourly"
 connect_to_wifi()
 
 url = f"https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/{frequency}?latitude={latitude}&longitude={longitude}"
-headers = {"apikey": apikey, "accept": "application/json"}
+headers = {"apikey": api_key, "accept": "application/json"}
 
 filename = "data.json"
 
@@ -68,7 +75,7 @@ print(f'\nSuccessfully got {"mock " if use_mock else ""}data!\n')
 
 # Write downloaded data to a JSON file
 data = resp.text
-data_dict = ujson.loads(data)
+data_dict = json.loads(data)
 # print(f'data type: {type(data)}')
 # print(f'data_dict type: {type(data_dict)}')
 
