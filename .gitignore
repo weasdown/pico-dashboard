@@ -287,3 +287,7 @@ pyrightconfig.json
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,circuitpython,pycharm+all,visualstudiocode
+
+### CUSTOM IGNORES
+**/.secrets.json
+**/.networks.json
