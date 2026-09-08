@@ -1,8 +1,8 @@
 class Datapoint:
     def __init__(self, time: str, screenTemperature: float, maxScreenAirTemp: float, minScreenAirTemp: float, screenDewPointTemperature: float,
-                feelsLikeTemperature: float, windSpeed10m: float, windDirectionFrom10m: int, windGustSpeed10m: float, max10mWindGust: float,
-                visibility: int, screenRelativeHumidity: float, mslp: int, uvIndex: int, significantWeatherCode: int, precipitationRate: float,
-                totalPrecipAmount: float, totalSnowAmount: float, probOfPrecipitation: int)->None:
+                 feelsLikeTemperature: float, windSpeed10m: float, windDirectionFrom10m: int, windGustSpeed10m: float, max10mWindGust: float,
+                 visibility: int, screenRelativeHumidity: float, mslp: int, uvIndex: int, significantWeatherCode: int, precipitationRate: float,
+                 totalPrecipAmount: float, totalSnowAmount: float, probOfPrecipitation: int) -> None:
         self.time: str = time
         self.screenTemperature: float = screenTemperature
         self.maxScreenAirTemp: float = maxScreenAirTemp
@@ -35,6 +35,7 @@ class Datapoint:
             print(
                 f'\ndata during KeyError for timepoint "{data['time']}": {data}')
             raise
+
 
 class Location:
     def __init__(self, licence: str, name: str) -> None:
@@ -181,6 +182,7 @@ class Parameter:
 
     def __repr__(self) -> str:
         return f'{self.description} ({self.unit.symbol.type})'
+
 
 class Point:
     def __init__(self, lat: float, long: float, elev: float) -> None:
