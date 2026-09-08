@@ -179,6 +179,9 @@ class Parameter:
         values: dict = data[1]
         return cls(name, values['description'], Unit.from_dict(values['unit']))
 
+    def __repr__(self) -> str:
+        return f'{self.description} ({self.unit.symbol.type})'
+
 class Point:
     def __init__(self, lat: float, long: float, elev: float) -> None:
         self.latitude: float = lat
