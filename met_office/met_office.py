@@ -4,11 +4,12 @@ import sys
 import time
 import ujson as json
 
-from met_office_classes import *
-from mock import MockResponse
-from wifi import connect_to_wifi
+from met_office.met_office_classes import *
+from met_office.mock import MockResponse
+from met_office.wifi import connect_to_wifi
 
 
+os.chdir('met_office')
 secrets_file: str = '.secrets.json'
 with open(secrets_file) as f:
     secrets = f.read()
@@ -28,7 +29,7 @@ connect_to_wifi()
 url = f'https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/{frequency}?latitude={latitude}&longitude={longitude}'
 headers = {'apikey': api_key, 'accept': 'application/json'}
 
-filename = "data.json"
+filename = 'data.json'
 
 print(f"Getting {frequency} forecast from the Met Office...")
 
