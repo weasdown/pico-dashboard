@@ -1,35 +1,12 @@
-import network
 import os
+import requests as r
 import sys
 import time
 import ujson as json
-import requests as r
 
 from met_office_classes import *
 from mock import MockResponse
-
-
-def connect_to_wifi() -> None:
-    ssid = 'Yφ'
-    password = '03j23@PPMwz'
-
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    wlan.connect(ssid, password)
-
-    max_wait = 10
-    print('Connecting to Wi-Fi...')
-    while max_wait > 0:
-        if wlan.status() < 0 or wlan.status() >= 3:
-            break
-        max_wait -= 1
-        print('\t- Waiting for connection...')
-        time.sleep(1)
-
-    if wlan.status() != 3:
-        raise RuntimeError('network connection failed')
-    else:
-        print('Connected to Wi-Fi\n')
+from wifi import connect_to_wifi
 
 
 secrets_file: str = '.secrets.json'
@@ -48,8 +25,8 @@ frequency = "hourly"
 
 connect_to_wifi()
 
-url = f"https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/{frequency}?latitude={latitude}&longitude={longitude}"
-headers = {"apikey": api_key, "accept": "application/json"}
+url = f'https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/{frequency}?latitude={latitude}&longitude={longitude}'
+headers = {'apikey': api_key, 'accept': 'application/json'}
 
 filename = "data.json"
 
