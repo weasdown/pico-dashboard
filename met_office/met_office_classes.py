@@ -251,3 +251,18 @@ class Feature:
         return f'Feature for {self.point.longitude}, {self.point.latitude}, run at {self.properties.model_run_date}'
 
 
+class SpotForecastFeatureCollection:
+    def __init__(self, feature: Feature, parameters: list[Parameter]) -> None:
+        self.feature: Feature = feature
+        self.parameters: list[Parameter] = parameters
+
+    @classmethod
+    def from_dict(cls, data: dict) -> SpotForecastFeatureCollection:
+        parameters_data: dict[str, dict] = data['parameters'][0]
+        parameter_items = list(parameters_data.items())
+
+        # raise NotImplementedError(
+        #     'SpotForecastFeatureCollection.from_dict() is not yet fully implemented')
+        parameters = [Parameter.from_tuple(param_data)
+                      for param_data in parameter_items]
+        return cls(Feature.from_dict(data['features'][0]), parameters)
